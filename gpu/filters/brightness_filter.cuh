@@ -2,19 +2,15 @@
 // Created by halfblood on 7/6/23.
 //
 
-#ifndef CPU_BRIGHTNESS_FILTER_H
-#define CPU_BRIGHTNESS_FILTER_H
-
+#ifndef GPU_BRIGHTNESS_FILTER_CUH
+#define GPU_BRIGHTNESS_FILTER_CUH
 
 typedef unsigned char ubyte;
-typedef char byte;
 
-#include <iostream>
-#include <climits>
 
 int
 change_brightness(const ubyte *gray_scaled_img, ubyte **brightness_changed_img, size_t width, size_t height,
                   size_t channels,
-                  byte brightness_change);
+                  int brightness_change);
 
-#endif //CPU_BRIGHTNESS_FILTER_H
+#endif //GPU_BRIGHTNESS_FILTER_CUH

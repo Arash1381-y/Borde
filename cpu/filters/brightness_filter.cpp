@@ -1,4 +1,4 @@
-#include <iostream>
+
 #include "brightness_filter.h"
 
 typedef unsigned char ubyte;
@@ -15,12 +15,12 @@ typedef signed short int16;
  * @param width The width of the image in pixels.
  * @param height The height of the image in pixels.
  * @param channels The number of color channels per pixel in the input image (should be 1 for grayscale images).
- * @param brightness_change The amount to change the brightness by, in the range [-255, 255].
+ * @param brightness_change The amount to change the brightness by, in the range [-128, 127].
  * @return 0 if the brightness change succeeded, or 1 if memory allocation failed or the input image has an invalid number of channels.
  */
 int change_brightness(const ubyte *gray_scaled_img, ubyte **brightness_changed_img, size_t width, size_t height,
                       size_t channels,
-                      ubyte brightness_change) {
+                      byte brightness_change) {
     // Check if the input image and channels are valid
     if (gray_scaled_img == nullptr || channels != 1) {
         std::cout << "Invalid input image or number of channels. Expected a single-channel grayscale image.\n";
@@ -48,8 +48,8 @@ int change_brightness(const ubyte *gray_scaled_img, ubyte **brightness_changed_i
         r_ex = (int16) (r_ex + b_ex);
 
         // Clip the pixel value to the range [0, 255]
-        if (r_ex > 255) {
-            pixel_color = 255;
+        if (r_ex > UCHAR_MAX) {
+            pixel_color = UCHAR_MAX;
         } else if (r_ex < 0) {
             pixel_color = 0;
         } else {

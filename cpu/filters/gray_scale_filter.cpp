@@ -2,10 +2,12 @@
 
 
 #include <iostream>
-#include <cassert>
 #include "../stb/stb_image.h"
 #include "../stb/stb_image_write.h"
 #include "../stb/stb_image.h"
+
+
+#define CHANNELS_NUM 3
 
 
 /**
@@ -39,17 +41,18 @@ int convert_to_gray_scale(const ubyte *image, ubyte **gray_scaled_image, size_t 
     }
 
     // Convert the image to grayscale
-    for (int i = 0; i < width * height * channels; i += 3) {
+    for (int i = 0; i < width * height; i++) {
         // Get the pixel values for each channel
-        ubyte r = image[i];
-        ubyte g = image[i + 1];
-        ubyte b = image[i + 2];
+        size_t image_index = CHANNELS_NUM * i;
+        ubyte r = image[image_index];
+        ubyte g = image[image_index + 1];
+        ubyte b = image[image_index + 2];
 
         // Convert the pixel to grayscale using the specified weights for each channel
         auto gray_pixel = (ubyte) (0.21 * r + 0.72 * g + 0.07 * b);
 
         // Store the grayscale pixel value in the output buffer
-        (*gray_scaled_image)[i / 3] = gray_pixel;
+        (*gray_scaled_image)[i] = gray_pixel;
     }
 
     return 0;

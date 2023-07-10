@@ -101,12 +101,12 @@ int detect_edges(const ubyte *image,
 
     byte Gx[KERNEL_HEIGHT * KERNEL_WIDTH] = {-1, 0, 1, -2, 0, 2, -1, 0, 1};
 
-    byte Gy[9] = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
+    byte Gy[KERNEL_HEIGHT * KERNEL_WIDTH] = {-1, -2, -1, 0, 0, 0, 1, 2, 1};
 
 
     ubyte img_sec[KERNEL_HEIGHT * KERNEL_WIDTH]; // section of image (separate by channel)
-    ubyte out_pixel;
 
+    ubyte out_pixel;
     *edges_detected_image = (ubyte *) malloc(width * height * sizeof(ubyte));
 
     // check if the memory was allocated
