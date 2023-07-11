@@ -8,6 +8,7 @@
 
 typedef unsigned char ubyte;
 typedef char byte;
+typedef signed short int16;
 
 #include <iostream>
 #include <climits>

@@ -1,8 +1,6 @@
 
 #include "brightness_filter.h"
 
-typedef unsigned char ubyte;
-typedef signed short int16;
 
 /**
  * Changes the brightness of a grayscale image by a specified amount.
