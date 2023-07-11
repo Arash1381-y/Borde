@@ -1,6 +1,6 @@
 # Edge Detection Using Sobel Operation
 
-## summary
+## SUMMARY
 
 In this project, the edge detection is implemented using sobel operation. The process can be done in CPU and GPU.
 
@@ -9,8 +9,6 @@ Three filters are implemented in this project, which are:
 1. **grayscale filter** : convert the image to grayscale
 2. **brightness filter** : adjust the brightness of the image
 3. **sobel filter** : detect the edge of the image
-
-
 
 ### SEE THE RESULTS 😍
 
@@ -35,6 +33,17 @@ Three filters are implemented in this project, which are:
   <img src="./results/input_sobel.png" width="300px" style="margin: 40px" />
 </div>
 
+## CONFIGURATION
+
+You can change the default configuration in `config.h` file.
+
+Current Options:
+
++ **INPUT_PATH** : the path of input image
++ **OUTPUT_PATH** : the path of output image
++ **BRIGHTNESS** : the brightness change of the filter
++ **THRESHOLD** : the threshold of the sobel filter
++ **STRENGTH_RATIO** : the amount of increase and decrease of the strength of the edges based on the threshold
 
 ## CPU implementation
 
