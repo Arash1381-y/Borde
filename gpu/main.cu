@@ -2,13 +2,15 @@
 #include <chrono>
 
 
+#include "../stb/stb_image.h"
+
+#include "../stb/stb_image_write.h"
+
+#include "../config.h"
+
 #define STB_IMAGE_IMPLEMENTATION
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-
-#include "stb/stb_image.h"
-
-#include "stb/stb_image_write.h"
 
 #include "filters/gray_scale_filter.cuh"
 
@@ -17,10 +19,56 @@
 #include "filters//sobel_filter.cuh"
 
 
-int main() {
+void do_gray_scale_test(ubyte *input, ubyte *output, size_t width, size_t height) {
+
+    // convert to gray
+    convert_to_gray_scale(input, &output, width, height, 3);
+
+    // write the gray scaled image
+    char *output_path = (char *) malloc((MAX_FILE_NAME + MAX_PATH_NAME) * sizeof(char));
+    sprintf(output_path, "%s%s", INPUT_PATH, "gray_scaled.png");
+
+    stbi_write_png(output_path, width, height,
+                   1, output, width);
+}
+
+void do_brightness_test(ubyte *input, ubyte *output, size_t width, size_t height, byte br) {
+    change_brightness(input,
+                      &output,
+                      width, height,
+                      1, br);
+
+
+    char *output_path = (char *) malloc((MAX_FILE_NAME + MAX_PATH_NAME) * sizeof(char));
+    sprintf(output_path, "%s%s", INPUT_PATH, "brightness_changed.png");
+
+    // write the brightness changed image
+    stbi_write_png(output_path, width, height,
+                   1, output, width);
+}
+
+void init_arg(){
+
+}
+
+int main(int argc, char *argv[]) {
+
+    // args
+    bool default_mode;
+    char *input_path = (char *) malloc((MAX_FILE_NAME + MAX_PATH_NAME) * sizeof(char));
+    bool change_brightness;
+
+
+
+
+
+
     // load the image
+    char file_name[MAX_FILE_NAME] = "input.png";
+    sprintf(input_path, "%s%s", INPUT_PATH, file_name);
+
     int width, height, channels;
-    unsigned char *image = stbi_load("./samples/img.png", &width, &height, &channels, 3);
+    unsigned char *image = stbi_load(input_path, &width, &height, &channels, 3);
 
     if (image == nullptr) {
         printf("Error in loading the image\n");
@@ -33,13 +81,7 @@ int main() {
 
     // gray scales the image
     unsigned char *gray_scaled_image;
-    convert_to_gray_scale(image, &gray_scaled_image, width, height, 3);
-
-
-
-    // write the gray scaled image
-    stbi_write_png("./results/gray_scaled_image.png", width, height,
-                   1, gray_scaled_image, width);
+    do_gray_scale_test(image, gray_scaled_image, width, height);
 
     // brightness change
     unsigned char *brightness_changed_image;
