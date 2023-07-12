@@ -1,4 +1,4 @@
-#include "gray_scale_filter.h"
+#include "../filters/gray_scale_filter.h"
 
 
 #include <iostream>

@@ -1,5 +1,5 @@
 
-#include "brightness_filter.h"
+#include "../filters/brightness_filter.h"
 
 
 /**

@@ -1,5 +1,5 @@
 #include <iostream>
-#include "sobel_filter.h"
+#include "../filters/sobel_filter.h"
 
 
 #define KERNEL_WIDTH 3
