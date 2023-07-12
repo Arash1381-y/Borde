@@ -8,8 +8,8 @@ const char *DEFAULT_RESULT_PATH = "./../results/";
 const char *DEFAULT_INPUT_FILENAME = "sample.png";
 
 const char BRIGHTNESS_DEFAULT = 20;
-const char SOBEL_THRESHOLD = 80;
-const double STRENGTH_RATIO = .7;
+const char SOBEL_THRESHOLD = 100;
+const double STRENGTH_RATIO = .3;
 
 
 #endif //CPU_CONFIG_H
