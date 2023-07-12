@@ -10,74 +10,89 @@
 
 #include "../stb/stb_image_write.h"
 
-#include "../filters/brightness_filter.h"
+#include "../../filters/brightness_filter.h"
 
 #include "../../config.h"
 
+#include "helper.cpp"
+
 namespace fs = std::filesystem;
+
+void guide() {
+    std::cout << "\033[1;33m" << "----------------------------------------\n" << "\033[0m";
+
+    std::cout << "\033[1;33m" << "GUIDE: " << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "No arguments were provided! Default values will be used!" << "\033[0m\n";
+    std::cout << "\033[1;33m"
+              << "Usage: ./brightness_filter_runner.out <input_path> <input_filename> <result_path> <brightness_change>"
+              << "\033[0m\n";
+    std::cout << "\033[1;33m" << "Default values: " << "\033[0m\n";
+    std::cout << "\033[1;33m" << "input_path: " << DEFAULT_INPUT_PATH << "\033[0m\n";
+    std::cout << "\033[1;33m" << "input_filename: " << DEFAULT_INPUT_FILENAME << "\033[0m\n";
+    std::cout << "\033[1;33m" << "result_path: " << DEFAULT_RESULT_PATH << "\033[0m\n";
+    std::cout << "\033[1;33m" << "brightness_change: " << (int) BRIGHTNESS_DEFAULT << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "Use '-' as an argument to use the default value!" << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "Example: ./brightness_filter_runner.out - - - 50" << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "----------------------------------------\n" << "\033[0m\n";
+}
 
 int main(int argc, char *argv[]) {
 
     char *input_filename = (char *) malloc(sizeof(char) * FILENAME_MAX);
     char *result_path = (char *) malloc(sizeof(char) * (FILENAME_MAX + PATH_MAX));
     char *input_path = (char *) malloc(sizeof(char) * (FILENAME_MAX + PATH_MAX));
-    byte brightness_change = BRIGHTNESS_DEFAULT;
+    byte brightness_change;
 
 
-    if (argc == 3) {
-        strcpy(input_filename, argv[1]);
-        // check if filename is png
-        if (strstr(input_filename, ".png") == nullptr) {
-            std::cout << "Invalid file type! Only png files are supported!\n";
-            return 1;
-        }
+    if (argc == 5) {
+        SET_OR_DEFAULT(argv[1], input_path, DEFAULT_INPUT_PATH)
+        SET_OR_DEFAULT(argv[2], input_filename, DEFAULT_INPUT_FILENAME)
+        SET_OR_DEFAULT(argv[3], result_path, DEFAULT_RESULT_PATH)
 
-        // init the path with default path in config.h
-        strcpy(input_path, INPUT_PATH);
+        if (!IS_PNG(input_filename)) { ERROR_COUT_AND_RETURN(INVALID_FILE_TYPE) }
+
+        // concat the path and filename
         strcat(input_path, input_filename);
 
-        // check if the path is valid and the file exists
-        if (!fs::exists(input_path)) {
-            std::cout << "Invalid file path!\n";
-            return 1;
-        }
+        if (!PATH_EXISTS(input_path)) { ERROR_COUT_AND_RETURN(INVALID_FILE_PATH) }
+        if (!PATH_EXISTS(result_path)) { ERROR_COUT_AND_RETURN(INVALID_RESULT_PATH) }
 
-        strcpy(result_path, RESULT_PATH);
+        // concat the result path and filename without the .png
+        input_filename[strlen(input_filename) - 4] = '\0';
+        strcat(result_path, input_filename);
+        strcat(result_path, "_bright.png");
+
+        // the fourth arg is the brightness change
+        brightness_change = (byte) strtol(argv[4], nullptr, 10);
+        if (brightness_change < 0 || brightness_change > 127) { ERROR_COUT_AND_RETURN(INVALID_BRIGHTNESS_CHANGE) }
+
+    } else if (argc == 1) {
+        // use default values
+        strcpy(input_path, DEFAULT_INPUT_PATH);
+        strcpy(input_filename, DEFAULT_INPUT_FILENAME);
+        strcat(input_path, input_filename);
+        strcpy(result_path, DEFAULT_RESULT_PATH);
+        brightness_change = BRIGHTNESS_DEFAULT;
+
+
+        if (!IS_PNG(input_filename)) { ERROR_COUT_AND_RETURN(INVALID_FILE_TYPE) }
+        if (!PATH_EXISTS(input_path)) { ERROR_COUT_AND_RETURN(INVALID_FILE_PATH) }
+        if (!PATH_EXISTS(result_path)) { ERROR_COUT_AND_RETURN(INVALID_RESULT_PATH) }
+        if (brightness_change < 0 || brightness_change > 127) { ERROR_COUT_AND_RETURN(INVALID_BRIGHTNESS_CHANGE) }
 
         // remove the .png from the filename
         input_filename[strlen(input_filename) - 4] = '\0';
-
         strcat(result_path, input_filename);
-        strcat(result_path, "bright.png");
+        strcat(result_path, "_bright.png");
 
-        brightness_change = (byte) strtol(argv[2], nullptr, 10);
+        guide();
 
     } else {
-        strcpy(input_path, INPUT_PATH);
-        strcat(input_path, "input_bright.png");
-
-        std::cout << "\033[1;31m" << "using default setup. input image : " << input_path << "\033[0m\n";
-
-        // print the guide
-        std::cout << "\033[1;31m" << "Usage : ./brightness_filter_runner <filename> <brightness_change>\n" << "\033[0m";
-
-        // print the defaults
-        std::cout << "\033[1;31m" << "Default filename : " << "input_bright.png" << "\n" << "\033[0m";
-        std::cout << "\033[1;31m" << "Default brightness change : " << (int)brightness_change << "\n" << "\033[0m";
-
-        // print the example
-        std::cout << "\033[1;31m" << "Example : ./brightness_filter_runner input_bright.png 50\n" << "\033[0m";
-
-        std::cout << "\033[1;31m" << "----------------------------------------\n" << "\033[0m";
-
-        // check if the path is valid and the file exists
-        if (!fs::exists(input_path)) {
-            std::cout << "Invalid file path!\n";
-            return 1;
-        }
-
-        strcpy(result_path, RESULT_PATH);
-        strcat(result_path, "input_bright.png");
+        ERROR_COUT_AND_RETURN(INVALID_ARGUMENTS)
     }
 
     // load the image
@@ -105,15 +120,18 @@ int main(int argc, char *argv[]) {
                    1, brightness_changed_image, width);
 
 
-    // print the time and the result path
+    std::cout << "\033[1;34m" << "----------------------------------------\n" << "\033[0m";
+    std::cout << "\033[1;34m" << "REPORT: " << "\033[0m\n";
 
-    std::cout << "----------------------------------------\n";
-    std::cout << "Brightness changing filter took "
+    std::cout << "\033[1;34m" << "Time: "
               << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()
-              << " milliseconds\n";
-    std::cout << "----------------------------------------\n";
+              << "ms\n" << "\033[0m";
+    std::cout << "\033[1;34m" << "----------------------------------------\n" << "\033[0m\n";
 
+    std::cout << "\033[1;32m" << "----------------------------------------\n" << "\033[0m";
+    std::cout << "\033[1;32m" << "RESULT: " << "\033[0m\n";
     std::cout << "\033[1;32m" << "Result saved in : " << result_path << "\033[0m\n";
+    std::cout << "\033[1;32m" << "----------------------------------------\n" << "\033[0m\n";
 
     // free the memory
     free(input_filename);

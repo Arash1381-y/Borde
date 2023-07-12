@@ -10,11 +10,37 @@
 
 #include "../stb/stb_image_write.h"
 
-#include "../filters/gray_scale_filter.h"
+#include "../../filters/gray_scale_filter.h"
 
 #include "../../config.h"
 
+#include "helper.cpp"
+
 namespace fs = std::filesystem;
+
+void guide() {
+    std::cout << "\033[1;33m" << "----------------------------------------\n" << "\033[0m";
+
+    std::cout << "\033[1;33m" << "GUIDE: " << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "No arguments were provided! Default values will be used!" << "\033[0m\n";
+    std::cout << "\033[1;33m"
+              << "Usage: ./gray_scale_filter_runner.out <input_path> <input_filename> <result_path>"
+              << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "Default values: " << "\033[0m\n";
+    std::cout << "\033[1;33m" << "input_path: " << DEFAULT_INPUT_PATH << "\033[0m\n";
+    std::cout << "\033[1;33m" << "input_filename: " << DEFAULT_INPUT_FILENAME << "\033[0m\n";
+    std::cout << "\033[1;33m" << "result_path: " << DEFAULT_RESULT_PATH << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "Use '-' as an argument to use the default value!" << "\033[0m\n";
+
+    std::cout << "\033[1;33m"
+              << "Example: ./gray_scale_filter_runner.out /home/user/images/ image.png -"
+              << "\033[0m\n";
+
+    std::cout << "\033[1;33m" << "----------------------------------------\n" << "\033[0m\n";
+}
 
 int main(int argc, char *argv[]) {
 
@@ -23,61 +49,43 @@ int main(int argc, char *argv[]) {
     char *input_path = (char *) malloc(sizeof(char) * (FILENAME_MAX + PATH_MAX));
 
 
-    if (argc == 2) {
-        strcpy(input_filename, argv[1]);
-        // check if filename is png
-        if (strstr(input_filename, ".png") == nullptr) {
-            std::cout << "Invalid file type! Only png files are supported!\n";
-            return 1;
-        }
+    if (argc == 4) {
+        SET_OR_DEFAULT(input_path, argv[1], DEFAULT_INPUT_PATH)
+        SET_OR_DEFAULT(input_filename, argv[2], DEFAULT_INPUT_FILENAME)
+        SET_OR_DEFAULT(argv[3], result_path, DEFAULT_RESULT_PATH)
 
-        // init the path with default path in config.h
-        strcpy(input_path, INPUT_PATH);
-        strcat(input_path, input_filename);
+        if (!IS_PNG(input_filename)) { ERROR_COUT_AND_RETURN(INVALID_FILE_TYPE) }
 
         // check if the path is valid and the file exists
-        if (!fs::exists(input_path)) {
-            std::cout << "Invalid file path!\n";
-            return 1;
-        }
-
-        strcpy(result_path, RESULT_PATH);
+        if (!PATH_EXISTS(input_path)) { ERROR_COUT_AND_RETURN(INVALID_FILE_PATH) }
 
         // remove the .png extension
         input_filename[strlen(input_filename) - 4] = '\0';
-
         strcat(result_path, input_filename);
         strcat(result_path, "_gray_scaled.png");
 
+        if (!PATH_EXISTS(result_path)) { ERROR_COUT_AND_RETURN(INVALID_RESULT_PATH) }
+
+
+    } else if (argc == 1) {
+        // use default values
+        strcpy(input_path, DEFAULT_INPUT_PATH);
+        strcat(input_path, DEFAULT_INPUT_FILENAME);
+        strcpy(input_filename, DEFAULT_INPUT_FILENAME);
+        strcpy(result_path, DEFAULT_RESULT_PATH);
+
+        if (!PATH_EXISTS(input_path)) { ERROR_COUT_AND_RETURN(INVALID_FILE_PATH) }
+        if (!PATH_EXISTS(result_path)) { ERROR_COUT_AND_RETURN(INVALID_RESULT_PATH) }
+
+        // remove the .png extension
+        input_filename[strlen(input_filename) - 4] = '\0';
+        strcat(result_path, input_filename);
+        strcat(result_path, "_gray_scaled.png");
+
+        guide();
+
     } else {
-        std::cout << "\033[1;31m" << "No arguments provided! Using default setup!\n" << "\033[0m";
-
-        // GUIDE
-        std::cout << "\033[1;31m" << "Usage : ./gray_scale_runner <filename>\n" << "\033[0m";
-
-        // DEFAULTS
-        std::cout << "\033[1;31m" << "Default filename : " << "input_gray.png" << "\n" << "\033[0m";
-
-        // EXAMPLE
-        std::cout << "\033[1;31m" << "Example : ./gray_scale_runner input_gray.png\n" << "\033[0m";
-
-        std::cout << "\033[1;31m" << "----------------------------------------\n" << "\033[0m";
-
-
-        strcpy(input_path, INPUT_PATH);
-        strcat(input_path, "input_gray.png");
-
-        // print the path in yellow
-        std::cout << "\033[1;33m" << "using default setup. input image : " << input_path << "\033[0m\n";
-
-        // check if the path is valid and the file exists
-        if (!fs::exists(input_path)) {
-            std::cout << "Invalid file path!\n";
-            return 1;
-        }
-
-        strcpy(result_path, RESULT_PATH);
-        strcat(result_path, "input_gray_scaled.png");
+        ERROR_COUT_AND_RETURN(INVALID_ARGUMENTS)
     }
 
     // load the image
@@ -104,16 +112,18 @@ int main(int argc, char *argv[]) {
                    1, gray_scaled_image, width);
 
 
-    // print the time and the result path
+    std::cout << "\033[1;34m" << "----------------------------------------\n" << "\033[0m";
+    std::cout << "\033[1;34m" << "REPORT: " << "\033[0m\n";
 
-    std::cout << "----------------------------------------\n";
-    std::cout << "Gray scale filter took "
+    std::cout << "\033[1;34m" << "Time: "
               << std::chrono::duration_cast<std::chrono::milliseconds>(finish - start).count()
-              << " milliseconds\n";
-    std::cout << "----------------------------------------\n";
+              << "ms\n" << "\033[0m";
+    std::cout << "\033[1;34m" << "----------------------------------------\n" << "\033[0m\n";
 
-    std::cout << "\033[1;32m" << "Result saved in : " << result_path << "\033[0m\n";
     std::cout << "\033[1;32m" << "----------------------------------------\n" << "\033[0m";
+    std::cout << "\033[1;32m" << "RESULT: " << "\033[0m\n";
+    std::cout << "\033[1;32m" << "Result saved in : " << result_path << "\033[0m\n";
+    std::cout << "\033[1;32m" << "----------------------------------------\n" << "\033[0m\n";
 
     // free the memory
     free(input_filename);
