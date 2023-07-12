@@ -1,79 +1,155 @@
-# Edge Detection Using Sobel Operation
+# Borde - GPU-accelerated edge detection using CUDA
 
-## SUMMARY
+Borde is a GPU-accelerated edge detection library written in C++ and CUDA.
+It is designed to be fast, easy to use, and
+easy to integrate into existing projects.
+Borde is licensed under the MIT license.
 
-In this project, the edge detection is implemented using sobel operation. The process can be done in CPU and GPU.
+## Features and Limitations :performing_arts:
 
-Three filters are implemented in this project, which are:
+**Features**:
 
-1. **grayscale filter** : convert the image to grayscale
-2. **brightness filter** : adjust the brightness of the image
-3. **sobel filter** : detect the edge of the image
++ **Well-Documented**: Borde is well-documented.
++ **Easy to Use**: Borde is easy to use.
++ **Configurable**: Borde is configurable and allows you to change the
+  parameters of the edge detection algorithm.
 
-### SEE THE RESULTS 😍
+**Limitations**:
 
-1. **grayscale filter**
++ **Only PNG**: Borde only supports PNG images for now.
++ **Only Sobel**: Borde only supports the Sobel operator for now.
 
-<div style="text-align: center;">
-  <img src="./samples/input_gray.png" width="300px" style="margin: 40px"/>
-  <img src="./results/input_gray_scaled.png" width="300px" style="margin: 40px" />
+## Demo Images :camera:
+
+<h3> Eiffel Tower </h3>
+
+
+<div style="display: flex; justify-content: space-between; margin-left: 10px; margin-right: 10px" >
+    <div style="text-align: center">
+        <img src="./samples/eiffel.png" width="95%" height="100%">
+         Input Image
+    </div>
+    <div style="text-align: center">
+        <img src="./results/eiffel_sobel.png" width="95%" height="100%">
+            Output Image
+    </div>
 </div>
 
-2. **brightness filter**
+<h3> Engine  </h3>
 
-<div style="text-align: center;">
-  <img src="./samples/input_bright.png" width="300px" style="margin: 40px"/>
-  <img src="./results/input_bright.png" width="300px" style="margin: 40px" />
+
+<div style="display: flex; justify-content: space-between; margin-left: 10px; margin-right: 10px" >
+    <div style="text-align: center">
+        <img src="./samples/sample.png" width="95%" height="100%">
+         Input Image
+    </div>
+    <div style="text-align: center">
+        <img src="./results/sample_sobel.png" width="95%" height="100%">
+            Output Image
+    </div>
 </div>
 
-3. **sobel filter**
+<h3> Flower and Butterfly </h3>
 
-<div style="text-align: center;">
-  <img src="./samples/input_sobel.png" width="300px" style="margin: 40px"/>
-  <img src="./results/input_sobel.png" width="300px" style="margin: 40px" />
+
+<div style="display: flex; justify-content: space-between; margin-left: 10px; margin-right: 10px" >
+    <div style="text-align: center">
+        <img src="./samples/flower.png" width="95%" height="100%">
+         Input Image
+    </div>
+    <div style="text-align: center">
+        <img src="./results/flower_sobel.png" width="95%" height="100%">
+            Output Image
+    </div>
 </div>
 
-## CONFIGURATION
+## Requirements :clipboard:
 
-You can change the default configuration in `config.h` file.
+**CPU**:
 
-Current Options:
++ CMake 3.10 or higher
++ GCC 7.5.0 or higher
 
-+ **INPUT_PATH** : the path of input image
-+ **OUTPUT_PATH** : the path of output image
-+ **BRIGHTNESS** : the brightness change of the filter
-+ **THRESHOLD** : the threshold of the sobel filter
-+ **STRENGTH_RATIO** : the amount of increase and decrease of the strength of the edges based on the threshold
+**GPU**:
 
-## CPU implementation
++ CUDA 10.1 or higher
 
-The CPU directory is the one thread implementation of sobel operation.
+## Compiling :hammer:
 
-### Pre-Requests
+To compile Borde, Go to `./runners` and run the following commands:
 
-+ only **gcc**
-
-### Compile
-
-For compiling the CPU implementation, use follow command in `cpu/runners` directory.
+For CPU version:
 
 ```makefile
-$ make
+$ make cpu
 ```
 
-This command will generate the executable file for all three filters.
-
-### Run
-
-Run the executable file in `cpu/runners` directory.
+For GPU version:
 
 ```makefile
-$ ./executable.out
+$ make gpu
 ```
 
-write a NOTICE here about args
+after compiling, you can see the 3 executables in `./runners` directory.
 
-<div style="color: #fff; background-color: rgba(255,224,139,0.4); border: 1px solid #ffeb3b; padding: 10px;">
-  <strong>Notice:</strong> The Guide of each executable file is written if you run the executable file without any args.
-</div>
+1. brightness_filter_runner_cpu/gpu : for brightness filter
+2. grayscale_filter_runner_cpu/gpu : for grayscale filter
+3. sobel_filter_runner_cpu/gpu : for sobel filter
+
+## Running :running:
+
+After compiling, you can run the executables in `./runners` directory.
+
+### Grayscale Filter
+
+Run the Grayscale Filter with no arguments to see the usage and default values:
+
+```bash
+$ ./grayscale_filter_runner_cpu/gpu.out
+```
+
+Available arguments:
+
+```bash
+Usage: ./grayscale_filter_runner_cpu/gpu.out <input_path> <input_filename> <result_path>
+```
+
+### Brightness Filter
+
+Run the Brightness Filter with no arguments to see the usage and default values:
+
+```bash
+$ ./brightness_filter_runner_cpu/gpu.out
+```
+
+Available arguments:
+
+```bash
+Usage: ./brightness_filter_runner_cpu/gpu.out <input_path> <input_filename> <result_path> <brightness_change>
+```
+
+### Sobel Filter
+
+Run the Sobel Filter with no arguments to see the usage and default values:
+
+```bash
+$ ./sobel_filter_runner_cpu/gpu.out
+```
+
+Available arguments:
+
+```bash
+Usage: ./sobel_filter_runner_cpu/gpu.out <input_path> <input_filename> <result_path> <threshold> <scale>
+```
+
+## Default Values :page_facing_up:
+
+You can check and set the default values in `./config.h` file.
+
+## Contributing :handshake:
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+
+
 
