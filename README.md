@@ -1,6 +1,6 @@
 # Borde - GPU-accelerated edge detection using CUDA
 
-Borde is a GPU-accelerated edge detection library written in C++ and CUDA.
+Borde is a GPU-accelerated edge detection app written in C++ and CUDA.
 It is designed to be fast, easy to use, and
 easy to integrate into existing projects.
 Borde is licensed under the MIT license.
