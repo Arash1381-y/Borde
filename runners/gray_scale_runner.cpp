@@ -6,13 +6,14 @@
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
+
 #include "../stb/stb_image.h"
 
 #include "../stb/stb_image_write.h"
 
-#include "../../filters/gray_scale_filter.h"
+#include "../filters/gray_scale_filter.h"
 
-#include "../../config.h"
+#include "../config.h"
 
 #include "helper.cpp"
 
@@ -50,8 +51,8 @@ int main(int argc, char *argv[]) {
 
 
     if (argc == 4) {
-        SET_OR_DEFAULT(input_path, argv[1], DEFAULT_INPUT_PATH)
-        SET_OR_DEFAULT(input_filename, argv[2], DEFAULT_INPUT_FILENAME)
+        SET_OR_DEFAULT(argv[1], input_path, DEFAULT_INPUT_PATH)
+        SET_OR_DEFAULT(argv[2], input_filename,  DEFAULT_INPUT_FILENAME)
         SET_OR_DEFAULT(argv[3], result_path, DEFAULT_RESULT_PATH)
 
         if (!IS_PNG(input_filename)) { ERROR_COUT_AND_RETURN(INVALID_FILE_TYPE) }
@@ -74,6 +75,7 @@ int main(int argc, char *argv[]) {
         strcpy(input_filename, DEFAULT_INPUT_FILENAME);
         strcpy(result_path, DEFAULT_RESULT_PATH);
 
+        if (!IS_PNG(input_filename)) { ERROR_COUT_AND_RETURN(INVALID_FILE_TYPE) }
         if (!PATH_EXISTS(input_path)) { ERROR_COUT_AND_RETURN(INVALID_FILE_PATH) }
         if (!PATH_EXISTS(result_path)) { ERROR_COUT_AND_RETURN(INVALID_RESULT_PATH) }
 

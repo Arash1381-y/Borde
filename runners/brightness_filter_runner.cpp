@@ -10,9 +10,9 @@
 
 #include "../stb/stb_image_write.h"
 
-#include "../../filters/brightness_filter.h"
+#include "../filters/brightness_filter.h"
 
-#include "../../config.h"
+#include "../config.h"
 
 #include "helper.cpp"
 

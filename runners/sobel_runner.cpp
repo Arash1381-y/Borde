@@ -7,13 +7,14 @@
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
+
 #include "../stb/stb_image.h"
 
 #include "../stb/stb_image_write.h"
 
-#include "../../filters/sobel_filter.h"
+#include "../filters/sobel_filter.h"
 
-#include "../../config.h"
+#include "../config.h"
 
 #include "helper.cpp"
 
@@ -21,24 +22,24 @@ namespace fs = std::filesystem;
 
 
 void guide() {
-    std::cout << "\033[1;31m" << "----------------------------------------\n" << "\033[0m";
+    std::cout << "\033[1;33m" << "----------------------------------------\n" << "\033[0m";
 
-    std::cout << "\033[1;31m" << "GUIDE: " << "\033[0m\n";
+    std::cout << "\033[1;33m" << "GUIDE: " << "\033[0m\n";
 
-    std::cout << "\033[1;31m" << "No arguments were provided! Default values will be used!" << "\033[0m\n";
-    std::cout << "\033[1;31m"
+    std::cout << "\033[1;33m" << "No arguments were provided! Default values will be used!" << "\033[0m\n";
+    std::cout << "\033[1;33m"
               << "Usage: ./sobel_filter_runner.out <input_path> <input_filename> <result_path> <threshold> <scale>"
               << "\033[0m\n";
 
-    std::cout << "\033[1;31m" << "Default values: " << "\033[0m\n";
-    std::cout << "\033[1;31m" << "input_path: " << DEFAULT_INPUT_PATH << "\033[0m\n";
-    std::cout << "\033[1;31m" << "input_filename: " << DEFAULT_INPUT_FILENAME << "\033[0m\n";
-    std::cout << "\033[1;31m" << "result_path: " << DEFAULT_RESULT_PATH << "\033[0m\n";
-    std::cout << "\033[1;31m" << "threshold: " << SOBEL_THRESHOLD << "\033[0m\n";
-    std::cout << "\033[1;31m" << "scale: " << STRENGTH_RATIO << "\033[0m\n";
-    std::cout << "\033[1;31m" << "Example: ./sobel_filter_runner.out - - - 50 0.3" << "\033[0m\n";
+    std::cout << "\033[1;33m" << "Default values: " << "\033[0m\n";
+    std::cout << "\033[1;33m" << "input_path: " << DEFAULT_INPUT_PATH << "\033[0m\n";
+    std::cout << "\033[1;33m" << "input_filename: " << DEFAULT_INPUT_FILENAME << "\033[0m\n";
+    std::cout << "\033[1;33m" << "result_path: " << DEFAULT_RESULT_PATH << "\033[0m\n";
+    std::cout << "\033[1;33m" << "threshold: " << SOBEL_THRESHOLD << "\033[0m\n";
+    std::cout << "\033[1;33m" << "scale: " << STRENGTH_RATIO << "\033[0m\n";
+    std::cout << "\033[1;33m" << "Example: ./sobel_filter_runner.out - - - 50 0.3" << "\033[0m\n";
 
-    std::cout << "\033[1;31m" << "----------------------------------------\n" << "\033[0m\n";
+    std::cout << "\033[1;33m" << "----------------------------------------\n" << "\033[0m\n";
 }
 
 int main(int argc, char *argv[]) {
@@ -51,11 +52,11 @@ int main(int argc, char *argv[]) {
     double scale;
 
     if (argc == 6) {
-        SET_OR_DEFAULT(input_path, argv[1], DEFAULT_INPUT_PATH)
-        SET_OR_DEFAULT(input_filename, argv[2], DEFAULT_INPUT_FILENAME)
-        SET_OR_DEFAULT(result_path, argv[3], DEFAULT_RESULT_PATH)
+        SET_OR_DEFAULT(argv[1], input_path, DEFAULT_INPUT_PATH)
+        SET_OR_DEFAULT(argv[2], input_filename, DEFAULT_INPUT_FILENAME)
+        SET_OR_DEFAULT(argv[3], result_path, DEFAULT_RESULT_PATH)
 
-        if (!IS_PNG(input_path)) { ERROR_COUT_AND_RETURN(INVALID_FILE_TYPE) }
+        if (!IS_PNG(input_filename)) { ERROR_COUT_AND_RETURN(INVALID_FILE_TYPE) }
 
         // construct the input path
         strcat(input_path, input_filename);
