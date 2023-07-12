@@ -27,12 +27,10 @@ Borde is licensed under the MIT license.
 <div style="display: flex; justify-content: space-between; margin-left: 10px; margin-right: 10px" >
     <div style="text-align: center">
         <img src="./samples/eiffel.png" width="95%" height="100%">
-         Input Image
     </div>
     <div style="text-align: center">
         <img src="./results/eiffel_sobel.png" width="95%" height="100%">
-            Output Image
-    </div>
+          </div>
 </div>
 
 <h3> Engine  </h3>
@@ -41,11 +39,9 @@ Borde is licensed under the MIT license.
 <div style="display: flex; justify-content: space-between; margin-left: 10px; margin-right: 10px" >
     <div style="text-align: center">
         <img src="./samples/sample.png" width="95%" height="100%">
-         Input Image
     </div>
     <div style="text-align: center">
         <img src="./results/sample_sobel.png" width="95%" height="100%">
-            Output Image
     </div>
 </div>
 
@@ -55,11 +51,9 @@ Borde is licensed under the MIT license.
 <div style="display: flex; justify-content: space-between; margin-left: 10px; margin-right: 10px" >
     <div style="text-align: center">
         <img src="./samples/flower.png" width="95%" height="100%">
-         Input Image
     </div>
     <div style="text-align: center">
         <img src="./results/flower_sobel.png" width="95%" height="100%">
-            Output Image
     </div>
 </div>
 
