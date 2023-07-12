@@ -1,9 +1,5 @@
-//
-// Created by halfblood on 7/6/23.
-//
-
-#ifndef CPU_BRIGHTNESS_FILTER_H
-#define CPU_BRIGHTNESS_FILTER_H
+#ifndef BRIGHTNESS_FILTER_H
+#define BRIGHTNESS_FILTER_H
 
 
 typedef unsigned char ubyte;
@@ -18,4 +14,4 @@ change_brightness(const ubyte *gray_scaled_img, ubyte **brightness_changed_img, 
                   size_t channels,
                   byte brightness_change);
 
-#endif //CPU_BRIGHTNESS_FILTER_H
+#endif //BRIGHTNESS_FILTER_H

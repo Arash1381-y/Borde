@@ -4,10 +4,8 @@
 #include <cassert>
 #include <climits>
 
-#ifndef CPU_SOBEL_FILTER_H
-#define CPU_SOBEL_FILTER_H
-
-#endif //CPU_SOBEL_FILTER_H
+#ifndef SOBEL_FILTER_H
+#define SOBEL_FILTER_H
 
 
 typedef char byte;
@@ -18,3 +16,5 @@ int detect_edges(const ubyte *image, ubyte **edges_detected_image, size_t width,
                  ubyte threshold,
                  double strength_ratio,
                  short dir);
+
+#endif //SOBEL_FILTER_H
