@@ -1,9 +1,8 @@
 #include <iostream>
-#include "brightness_filter.cuh"
+#include "./../filters/brightness_filter.h"
 
 __global__
 void brightness_change_kernel(const ubyte *gray_scaled_img, ubyte *brightness_changed_img, size_t width, size_t height,
-                              size_t channels,
                               int brightness_change) {
     // get the thread id
     size_t x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -27,7 +26,7 @@ void brightness_change_kernel(const ubyte *gray_scaled_img, ubyte *brightness_ch
 int
 change_brightness(const ubyte *gray_scaled_img, ubyte **brightness_changed_img, size_t width, size_t height,
                   size_t channels,
-                  int brightness_change) {
+                  byte brightness_change) {
 
     // Check if the input image and channels are valid
     if (gray_scaled_img == nullptr || channels != 1) {
@@ -67,7 +66,7 @@ change_brightness(const ubyte *gray_scaled_img, ubyte **brightness_changed_img, 
     // call the kernel
     brightness_change_kernel<<<grid_size, block_size>>>(device_gray_scaled_img,
                                                         device_brightness_changed_img, width,
-                                                        height, channels, brightness_change);
+                                                        height, brightness_change);
 
     // copy the image from the device
     cudaMemcpy(*brightness_changed_img, device_brightness_changed_img, width * height * sizeof(ubyte),

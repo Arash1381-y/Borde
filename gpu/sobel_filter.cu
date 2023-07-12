@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <iostream>
-#include "sobel_filter.cuh"
+#include "../filters/sobel_filter.h"
 
 
 #define KERNEL_WIDTH 3

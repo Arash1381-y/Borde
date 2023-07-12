@@ -1,5 +1,5 @@
 #include <iostream>
-#include "gray_scale_filter.cuh"
+#include "../filters/gray_scale_filter.h"
 
 #define GRID_SIZE 1024
 #define BLOCK_SIZE 1024
